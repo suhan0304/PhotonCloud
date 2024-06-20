@@ -35,5 +35,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
     // 로비에 접속 후 호출되는 콜백 함수
     public override void OnJoinedLobby() {
         Debug.Log($"PhotonNetwork.InLobby {PhotonNetwork.InLobby}");
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    // 랜덤한 룸 입장이 실패했을 때 호출되는 콜백 함수
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log($"JoinRandom Failed {returnCode}:{message}");
     }
 }
