@@ -65,5 +65,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
     {
         Debug.Log($"PhotonNetwork.InRoom = {PhotonNetwork.InRoom}");
         Debug.Log($"Player Count = {PhotonNetwork.CurrentRoom.PlayerCount}");
+
+        foreach(var player in PhotonNetwork.CurrentRoom.Players) {
+            Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
+        }
     }
 }
