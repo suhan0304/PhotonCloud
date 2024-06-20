@@ -46,9 +46,25 @@ public class Movement : MonoBehaviour
         moveDir.Set(moveDir.x, 0.0f, moveDir.z);
 
         controller.SimpleMove(moveDir * moveSpeed);
+
+        float forward = Vector3.Dot(moveDir, transform.forward);
+        float strafe = Vector3.Dot(moveDir, transform.right);
+
+        animator.SetFloat("Forward", forward);
+        animator.SetFloat("Strafe", strafe);
     }
 
     void Turn() {
-        
+        ray = camera.ScreenPointToRay(Input.mousePosition);
+
+        float enter = 0.0f;
+
+        plane.Raycast(ray, out enter);
+        hitPoint = ray.GetPoint(enter);
+
+        Vector3 lookDir = hitPoint - transform.position;
+        lookDir.y = 0;
+        transform.localRotation = Quaternion.LookRotation(lookDir);
+
     }
 }
