@@ -25,6 +25,12 @@ public class Movement : MonoBehaviour
 
     public float moveSpeed = 10.0f;
 
+    // 수신된 위치와 회전값을 저장할 변수
+    private Vector3 receivePos;
+    private Quaternion receiveRot;
+    // 수신된 좌표로의 이동 및 회전 속도의 민감도
+    public float damping = 10.0f;
+
     void Start() {
         controller = GetComponent<CharacterController>();
         transform = GetComponent<Transform>();
@@ -38,6 +44,11 @@ public class Movement : MonoBehaviour
         if (pv.IsMine) {
             virtualCamera.Follow = transform;
             virtualCamera.LookAt = transform;
+        }
+        else {
+            transform.position = Vector3.Lerp(transform.position, receivePos, Time.deltaTime * damping);
+            transform.rotation = Quaternion.Slerp(transform.rotation, receiveRot, Time.deltaTime * damping);
+            
         }
 
         plane = new Plane(transform.up, transform.position);
@@ -86,4 +97,17 @@ public class Movement : MonoBehaviour
         transform.localRotation = Quaternion.LookRotation(lookDir);
 
     }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        // 자신의 로컬 캐릭터인 경우 자신의 데이터를 다른 네트워크 유저에게 송신
+        if (stream.IsWriting) {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else {
+            receivePos = (Vector3)stream.ReceiveNext();
+            receiveRot = (Quaternion)stream.ReceiveNext();
+        }
+    }
 }
+
