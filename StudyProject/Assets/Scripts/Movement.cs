@@ -45,11 +45,6 @@ public class Movement : MonoBehaviour
             virtualCamera.Follow = transform;
             virtualCamera.LookAt = transform;
         }
-        else {
-            transform.position = Vector3.Lerp(transform.position, receivePos, Time.deltaTime * damping);
-            transform.rotation = Quaternion.Slerp(transform.rotation, receiveRot, Time.deltaTime * damping);
-            
-        }
 
         plane = new Plane(transform.up, transform.position);
     }
@@ -59,6 +54,11 @@ public class Movement : MonoBehaviour
         if (pv.IsMine) {
             Move();
             Turn();
+        }
+        else {
+            transform.position = Vector3.Lerp(transform.position, receivePos, Time.deltaTime * damping);
+            transform.rotation = Quaternion.Slerp(transform.rotation, receiveRot, Time.deltaTime * damping);
+            
         }
     }
 
