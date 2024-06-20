@@ -2,14 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
-using TMPro;
-using Unity.Burst.Intrinsics;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.Properties;
 using UnityEngine;
-using UnityEngine.Analytics;
 
-public class Movement : MonoBehaviour
+public class Movement : MonoBehaviourPunCallbacks, IPunObservable
 {
     private CharacterController controller;
     private new Transform transform;
