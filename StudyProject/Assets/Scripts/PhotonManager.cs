@@ -33,8 +33,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
     }
 
     void Start() {
+        // 저장된 유저명을 로드
         userId = PlayerPrefs.GetString("USER_ID", $"USER_{Random.Range(1,21):00}");
         userIF.text = userId;
+        // 접속 유저의 닉네임 등록
         PhotonNetwork.NickName = userId;
     }
 
