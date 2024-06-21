@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using Photon.Pun.Demo.Cockpit;
 using TMPro;
 
 public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜백 함수를 오버라이드해서 작성
