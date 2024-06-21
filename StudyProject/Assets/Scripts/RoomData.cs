@@ -32,7 +32,7 @@ public class RoomData : MonoBehaviour
 
     void OnEnterRoom(string roomName) {
         // 유저명 설정
-        photonManager.SetUserID();
+        photonManager.SetUserId();
 
         // 룸의 속성 정의
         RoomOptions ro = new RoomOptions();

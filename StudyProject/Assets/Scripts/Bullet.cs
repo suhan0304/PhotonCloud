@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public GameObject effect;
+    public int actorNumber;
 
     void Start() {
         GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * 1000.0f);

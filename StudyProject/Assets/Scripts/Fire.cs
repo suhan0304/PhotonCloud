@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class Fire : MonoBehaviour
@@ -21,14 +22,15 @@ public class Fire : MonoBehaviour
     void Update() {
         // 로컬 유저 여부와 마우스 왼쪽 버튼을 클릭했을 때 총알 발사
         if (pv.IsMine && isMouseClick) {
-            FireBullet();
-            pv.RPC("FireBullet", RpcTarget.Others, null);
+            FireBullet(pv.Owner.ActorNumber);
+            pv.RPC("FireBullet", RpcTarget.Others, pv.Owner.ActorNumber);
         }
     }
 
     [PunRPC]
-    void FireBullet()  {
+    void FireBullet(int acntorNo)  {
         if (!muzzleFlash.isPlaying) muzzleFlash.Play(true);
         GameObject bullet = Instantiate(bulletPrefab, firePos.position, firePos.rotation);
+        bullet.GetComponent<Bullet>().actorNumber = acntorNo;
     }
 }
