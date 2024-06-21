@@ -15,6 +15,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
     // 룸 이름으 ㄹㄹ입력할 TMP Input Field
     public TMP_InputField roomNameIF;
 
+    // 룸 목록에 대한 데이터를 저장하기 위한 딕셔너리 자료형
+    private Dictionary<string, GameObject> rooms = new Dictionary<string, GameObject>();
+    // 룸 목록을 표시할 프리팹
+    private GameObject roomItemPrefab;
+    // RoomItem 프리팹이 추가될 ScrollContent
+    public Transform scrollContent;
 
     void Awake() {
         // 마스터 클라이언트 씬 자동 동기화 옵션
@@ -27,8 +33,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         // 포톤 서버와의 데이터의 초당 전송 횟수
         Debug.Log(PhotonNetwork.SendRate);
 
+        // RoomItem 프리팹 로드
+        roomItemPrefab = Resources.Load<GameObject>("RoomItem");
+
         // 포톤 서버 접속
-        PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.IsConnected == false) {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     void Start() {
@@ -126,7 +137,42 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         }
     }
 
-#region UI_BUTTON_EVENT
+    // 룸 목록을 수신하는 콜백 함수
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        // 삭제된 RoomItem 프리팹을 저장할 임시변수
+        GameObject tempRoom = null;
+
+        foreach (var roomInfo in roomList) {
+            // 룸이 삭제된 경우
+            if (roomInfo.RemovedFromList == true) {
+                // 딕셔너리에서 룸 이름으로 검색해 저장된 RoomItem 프리팹을 추출
+                rooms.TryGetValue(roomInfo.Name, out tempRoom);
+
+                // RoomItem 프리팹 삭제
+                Destroy(tempRoom);
+
+                // 딕셔너리에서 해당 룸 이름의 데이터를 삭제
+                rooms.Remove(roomInfo.Name);
+            }
+            else { //룸 정보가 변경된 경우
+                // 룸 이름이 딕셔너리에 없는 경우 새로 추가
+                if (rooms.ContainsKey(roomInfo.Name) == false) {
+                    // RoomInfo 프리팹을 scrollContent 하위에 생성
+                    GameObject roomPrefab = Instantiate(roomItemPrefab, scrollContent);
+                    // 룸 정보를 표시하기 위해 RoomInfo 정보 전달
+                    roomPrefab.GetComponent<RoomData>().RoomInfo = roomInfo;
+                }
+                else { // 룸 이름이 딕셔너리에 없는 경우에 룸 정보를 갱신 
+                    rooms.TryGetValue(roomInfo.Name, out tempRoom);
+                    tempRoom.GetComponent<RoomData>().RoomInfo = roomInfo;
+                }
+            }
+            Debug.Log($"Room={roomInfo.Name} ({roomInfo.PlayerCount}/{roomInfo.MaxPlayers})");
+        }
+    }
+
+    #region UI_BUTTON_EVENT
 
     public void OnLoginClick() {
         // 유저명 저장
