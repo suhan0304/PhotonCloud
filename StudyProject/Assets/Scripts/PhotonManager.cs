@@ -8,7 +8,6 @@ using TMPro;
 public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜백 함수를 오버라이드해서 작성
 {
     private readonly string version = "1.0";
-
     private string userId = "Zack";
 
     // 유저명을 입력할 TMP Input Field
@@ -37,7 +36,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         userId = PlayerPrefs.GetString("USER_ID", $"USER_{Random.Range(1,21):00}");
         userIF.text = userId;
         // 접속 유저의 닉네임 등록
-        PhotonNetwork.NickName = userId;
+        //PhotonNetwork.NickName = userId;
     }
 
     // 유저명을 설정하는 로직
