@@ -28,7 +28,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         // 게임 버전 설정
         PhotonNetwork.GameVersion = version;
         // 접속 유저의 닉네임 설정
-        PhotonNetwork.NickName = userId;
+        //PhotonNetwork.NickName = userId;
 
         // 포톤 서버와의 데이터의 초당 전송 횟수
         Debug.Log(PhotonNetwork.SendRate);
@@ -47,7 +47,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         userId = PlayerPrefs.GetString("USER_ID", $"USER_{Random.Range(1,21):00}");
         userIF.text = userId;
         // 접속 유저의 닉네임 등록
-        //PhotonNetwork.NickName = userId;
+        PhotonNetwork.NickName = userId;
     }
 
     // 유저명을 설정하는 로직
@@ -118,11 +118,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
         Debug.Log($"PhotonNetwork.InRoom = {PhotonNetwork.InRoom}");
         Debug.Log($"Player Count = {PhotonNetwork.CurrentRoom.PlayerCount}");
 
-        /*
         foreach(var player in PhotonNetwork.CurrentRoom.Players) {
             Debug.Log($"{player.Value.NickName}, {player.Value.ActorNumber}");
         }
-
+        
+        /*
         // 출현 위치 정보를 배열에 저장
         Transform[] points = GameObject.Find("SpawnPointGroup").GetComponentsInChildren<Transform>();
         int idx = Random.Range(1, points.Length);
