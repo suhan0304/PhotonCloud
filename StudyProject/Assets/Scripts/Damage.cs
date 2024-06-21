@@ -30,5 +30,32 @@ public class Damage : MonoBehaviour {
         }
     }
 
-    
+    IEnumerator PlayerDie() {
+        cc.enabled = false;
+        anim.SetBool(hashRespawn, false);
+        anim.SetTrigger(hashDie);
+
+        yield return new WaitForSeconds(3.0f);
+
+        anim.SetBool(hashRespawn, true);
+
+        SetPlayerVisible(false);
+
+        yield return new WaitForSeconds(1.5f);
+
+        Transform[] points = GameObject.Find("SpawnPointGroup").GetComponentsInChildren<Transform>();
+        int idx = Random.Range(1, points.Length);
+        transform.position = points[idx].position;
+
+        currHp = 100;
+        SetPlayerVisible(true);
+        cc.enabled = true;
+    }
+
+    void SetPlayerVisible(bool isVisible) {
+        for (int i=0; i<renderers.Length; i++) {
+            renderers[i].enabled = isVisible;
+        }
+    }
+
 }
