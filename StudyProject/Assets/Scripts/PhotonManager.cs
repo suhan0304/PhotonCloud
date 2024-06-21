@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Pun.Demo.Cockpit;
+using TMPro;
 
 public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜백 함수를 오버라이드해서 작성
 {
     private readonly string version = "1.0";
 
     private string userId = "Zack";
+
+    // 유저명을 입력할 TMP Input Field
+    public TMP_InputField userIF;
+    // 룸 이름으 ㄹㄹ입력할 TMP Input Field
+    public TMP_InputField roomNameIF;
+
 
     void Awake() {
         // 마스터 클라이언트 씬 자동 동기화 옵션
@@ -23,6 +31,27 @@ public class PhotonManager : MonoBehaviourPunCallbacks // PUN의 다양한 콜�
 
         // 포톤 서버 접속
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    void Start() {
+        userId = PlayerPrefs.GetString("USER_ID", $"USER_{Random.Range(1,21):00}");
+        userIF.text = userId;
+        PhotonNetwork.NickName = userId;
+    }
+
+    // 유저명을 설정하는 로직
+    public void SetUserID() {
+        if (string.IsNullOrEmpty(userIF.text)) {
+            userId = $"USER_{Random.Range(1,21):00}";
+        }
+        else {
+            userId = userIF.text;
+        }
+
+        // 유저명 저장
+        PlayerPrefs.SetString("USER_ID", userId);
+        // 접속 유저의 닉네임 등록
+        PhotonNetwork.NickName = userId;
     }
 
     // 포톤 서버에 접속 후 호출되는 콜백 함수
